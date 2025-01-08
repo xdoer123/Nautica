@@ -80,11 +80,16 @@ async function checkProxy(proxyAddress: string, proxyPort: number): Promise<Prox
 
   let proxySaved = 0;
 
-  for (const proxy of proxyList) {
+  for (let i = 0; i < proxyList.length; i++) {
+    const proxy = proxyList[i];
     const proxyKey = `${proxy.address}:${proxy.port}`;
     if (!proxyChecked.includes(proxyKey)) {
       proxyChecked.push(proxyKey);
-      uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org.replaceAll(/[+]/g, " ")}`);
+      try {
+        uniqueRawProxies.push(`${proxy.address},${proxy.port},${proxy.country},${proxy.org.replaceAll(/[+]/g, " ")}`);
+      } catch (e: any) {
+        continue;
+      }
     } else {
       continue;
     }
@@ -103,7 +108,7 @@ async function checkProxy(proxyAddress: string, proxyPort: number): Promise<Prox
           }
 
           proxySaved += 1;
-          console.log(`[${CHECK_QUEUE.length}] Proxy disimpan:`, proxySaved);
+          console.log(`[${i}/${proxyList.length}] Proxy disimpan:`, proxySaved);
         }
       })
       .finally(() => {
