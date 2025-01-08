@@ -202,9 +202,9 @@ async function readProxyList(): Promise<ProxyStruct[]> {
   uniqueRawProxies.sort(sortByCountry);
   activeProxyList.sort(sortByCountry);
 
-  Bun.write(KV_PAIR_PROXY_FILE, JSON.stringify(kvPair, null, "  "));
-  Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
-  Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
+  await Bun.write(KV_PAIR_PROXY_FILE, JSON.stringify(kvPair, null, "  "));
+  await Bun.write(RAW_PROXY_LIST_FILE, uniqueRawProxies.join("\n"));
+  await Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
 
   console.log(`Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
   process.exit(0);
