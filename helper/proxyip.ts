@@ -21,6 +21,8 @@ interface ProxyTestResult {
   };
 }
 
+let myGeoIpString: any = null;
+
 const KV_PAIR_PROXY_FILE = "./kvProxyList.json";
 const RAW_PROXY_LIST_FILE = "./rawProxyList.txt";
 const PROXY_LIST_FILE = "./proxyList.txt";
@@ -72,9 +74,12 @@ export async function checkProxy(proxyAddress: string, proxyPort: number): Promi
     const start = new Date().getTime();
     const [ipinfo, myip] = await Promise.all([
       sendRequest(IP_RESOLVER_DOMAIN, IP_RESOLVER_PATH, proxyInfo),
-      sendRequest(IP_RESOLVER_DOMAIN, IP_RESOLVER_PATH, null),
+      myGeoIpString == null ? sendRequest(IP_RESOLVER_DOMAIN, IP_RESOLVER_PATH, null) : myGeoIpString,
     ]);
     const finish = new Date().getTime();
+
+    // Save local geoip
+    if (myGeoIpString == null) myGeoIpString = myip;
 
     const parsedIpInfo = JSON.parse(ipinfo as string);
     const parsedMyIp = JSON.parse(myip as string);
