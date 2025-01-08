@@ -207,6 +207,7 @@ async function readProxyList(): Promise<ProxyStruct[]> {
   Bun.write(PROXY_LIST_FILE, activeProxyList.join("\n"));
 
   console.log(`Waktu proses: ${(Bun.nanoseconds() / 1000000000).toFixed(2)} detik`);
+  process.exit(0);
 })();
 
 function sortByCountry(a: string, b: string) {
